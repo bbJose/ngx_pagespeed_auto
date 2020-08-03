@@ -82,37 +82,37 @@ install_basic(){
 			sudo apt-get -y install build-essential zlib1g-dev libpcre3 libpcre3-dev unzip uuid-dev
 		;;
 		*)
-			echo -e "${Error} 不支持您的系统 !"
+			echo -e "${Error} Your system is not supported!"
 		;;
 	esac
-	echo -e "${Info} 模块依赖安装完成 !"
+	echo -e "${Info} The module dependency installation is complete!"
 }
 
 check_root(){
-	[[ "`id -u`" != "0" ]] && echo -e "${Error} 请先进入root账户 !"
+	[[ "`id -u`" != "0" ]] && echo -e "${Error}Please enter the root account first!"
 }
 
 check_gcc(){
-	gcc --version  && echo -e "${Info} 请先确认gcc版本>=4.8! 输入任意按键来确认？"
+	gcc --version  && echo -e "Please confirm gcc version>=4.8! Enter any key to confirm?"
 	read aNum
 }
 
 restart_ngx(){
 	service nginx restart
-	echo -e "${Info} 已重启Nginx!"
+	echo -e "${Info} Nginx has been restarted!"
 }
 
 temp_swap_add(){
 	sudo dd if=/dev/zero of=/swapfile bs=64M count=16
 	sudo mkswap /swapfile
 	sudo swapon /swapfile
-	echo -e "${Info} 临时增加Swap以解决编译中内存不足崩溃!"	
+	echo -e "${Info} temporarily increase Swap to solve the problem of insufficient memory during compilation!"	
 }
 
 temp_swap_del(){
 	sudo swapoff /swapfile
 	sudo rm /swapfile
-	echo -e "${Info} 删除临时增加的swap空间!"	
+	echo -e "${Info} delete temporarily increased swap space!"	
 }
 
 setup(){
@@ -121,7 +121,7 @@ setup(){
 	check_gcc
 	install_basic
 	temp_swap_add
-	echo -e "${Info} 安装前配置已完成！!"	
+	echo -e "${Info} The configuration before installation is complete!"	
 }
 
 install(){
@@ -129,27 +129,27 @@ install(){
 	install_ngx_pagespeed
 	temp_swap_del
 	restart_ngx
-	echo -e "${Info} ngx_pagespeed 模块安装完成!"	
+	echo -e "${Info} The ngx_pagespeed module is installed!"	
 }
 
 status(){
 	NGX_CONF=`/usr/bin/nginx -V 2>&1 >/dev/null`
 	echo $NGX_CONF | grep -q pagespeed
     if [ $? = 0 ]; then
-        echo -e "${Info} Pagespeed正在运行 !"
+        echo -e "${Info} Pagespeed is running !"
     else
-    	echo -e "${Error} Pagespeed没有运行 !"
+    	echo -e "${Error} Pagespeed is not running !"
     fi
 }
 
-echo -e "${Info} 选择你要使用的功能: "
-echo -e "1.安装前配置\n2.进行安装\n3.检查运行状态\n"
-read -p "输入数字以选择:" function
+echo -e "${Info} Choose the function you want to use: "
+echo -e "1. Configure before installation\n2. Install\n3. Check running status\n"
+read -p "Enter numbers to select:" function
 
 while [[ ! "${function}" =~ ^[1-4]$ ]]
 	do
-		echo -e "${Error} 无效输入"
-		echo -e "${Info} 请重新选择" && read -p "输入数字以选择:" function
+		echo -e "${Error} Invalid input"
+		echo -e "${Info} Please select again" && read -p "Enter numbers to select:" function
 	done
 
 if [[ "${function}" == "1" ]]; then
