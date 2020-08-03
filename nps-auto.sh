@@ -93,7 +93,7 @@ check_root(){
 }
 
 check_gcc(){
-	gcc --version  && echo -e "Please confirm gcc version>=4.8! Enter any key to confirm?"
+	gcc --version  && echo -e "${Info} Please confirm gcc version>=4.8! Enter any key to confirm?"
 	read aNum
 }
 
